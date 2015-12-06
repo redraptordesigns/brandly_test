@@ -27,7 +27,13 @@ body.upload .container.content {
     max-width: 1200px;
     margin-top: 150px;
 }
-
+body.item-detail .container.content {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    max-width: 1200px;
+    margin-bottom: 60px;
+    padding: 20px 40px;
+}
 .container {
     max-width: 1200px;
 }
@@ -104,6 +110,13 @@ a:focus,
     color: #909090;
 }
 
+/* Text Changes */
+.text-align-right {
+    text-align: right !important;
+}
+.badge-danger { 
+    background-color: #ec1c2d;
+}
 /****************************************************
   Upload
 *****************************************************/
