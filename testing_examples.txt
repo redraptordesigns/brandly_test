@@ -1,0 +1,39 @@
+// Example 1
+
+  describe('testing isUploaded filter', function () {
+  'use strict'; 
+
+  var $filter;
+
+  beforeEach(function () {
+    module('itemApp');
+
+    inject(function (_$filter_) {
+      $filter = _$filter_;
+    });
+  });
+
+  it('Returns string depending on image availability', function () {
+    expect(isUploaded('')).toBe('not uploaded');
+  });
+});
+
+// Example 2
+
+  describe('testing freeShip filter', function () {
+  'use strict'; 
+
+  var $filter;
+
+  beforeEach(function () {
+    module('cartApp');
+
+    inject(function (_$filter_) {
+      $filter = _$filter_;
+    });
+  });
+
+  it('Returns string depending on total shipping cost', function () {
+    expect(freeShip(50)).toBe('$0');
+  });
+});
