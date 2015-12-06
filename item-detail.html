@@ -64,7 +64,165 @@
         <p>Form saved</p>
     </div>
     <div class="container content">
+        <div class="row">
+            <div class="col-sm-12 heading-title-spacer">
+                <h4>Personalize your content <span class="pull-right">Bulk Order?&nbsp;<a href="#">Start here <i class="fa fa-long-arrow-right"></i></a></span></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="card-preview-area" class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Card Preview</strong><span class="pull-right"><a href="#" id="card-front" class="active" ng-click="flip('front')">Front</a>&nbsp;|<a href="#" id="card-back" ng-click="flip('back')">&nbsp;Back</a></span></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="preview-area" ng-repeat="card in card">
+                            <img id="card-preview" class="img-responsive" ng-src="{{ card.frontSide }}" />
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input id="cropMarks" ng-click="toggleCropMarks()" type="checkbox" checked="checked"> Show crop marks
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <a class="pull-right ten-marginer" ng-click="zoom()" href="#">Zoom in</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Product Settings</strong></h3>
+                    </div>
+                    <div class="panel-body" ng-repeat="card in card">
+                        <form>
+                            <div class="form-group col-sm-6">
+                                <label for="fullName">Paper Stock</label>
+                                <select class="form-control" ng-model="card.paperType">
+                                    <option selected="selected">White 14pt. Uncoated Flat Ink</option>
+                                    <option>Classic Crest White 100lb</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <br /><br />
+                                <a href="#" data-toggle="modal" data-target="#paper-modal">View paper</a>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <ul class="square-list">
+                                    <li>Card Size: {{ card.size }}</li>
+                                    <li>Front Side: {{  card.frontSide | isUploaded }}</li>
+                                    <li>Back Side: {{  card.backSide | isUploaded }}</li>
+                                </ul>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label>Description</label>
+                                <p ng-model="card.details">{{ card.details }}</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Edit text</strong><a class="pull-right" ng-click="reset('clicked')">clear all</a></h3>
+                    </div>
+                    <div class="panel-body">
+                        <form class="col-sm-10">
+                            <div class="form-group col-sm-12">
+                                <label for="fullName">Full name</label>
+                                <input type="text" class="form-control" id="fullName" placeholder="John Doe" ng-model="user.fullName" required>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="title">Password</label>
+                                <input type="text" class="form-control" id="title" placeholder="Title" ng-model="user.title">
+                            </div>
+                            <div class="col-sm-12">
+                                <label for="phoneType">Phone Number(s)</label>
+                            </div>
 
+                            <div class="form-group" ng-repeat="item in phoneInputs track by $index">
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control col-sm-6" id="phoneType" placeholder="Cell" ng-model="user.phoneType[$index + 1]">
+                                </div>
+                                <div class="small-spacer visible-xs-block"></div>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" id="phoneNumber" placeholder="xxx-xxx-xxx" ng-model="user.phoneNumber[$index + 1]">
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="small-spacer"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <a href="#" class="btn btn-xs btn-default" ng-click="addPhoneField()">+ Add phone</a>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="col-sm-12">
+                                <label for="email">Email</label>
+                            </div>
+                            <div class="form-group col-sm-12" ng-repeat="item in emailInputs track by $index">
+                                <input type="text" class="form-control" id="email" placeholder="john.doe@brandly.com" ng-model="user.email[$index + 1]">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <a href="#" class="btn btn-xs btn-default" ng-click="addEmailField()">+ Add email</a>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group col-sm-12">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="" ng-model="user.address">
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="city" placeholder="Seattle" ng-model="user.city">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <label for="zipcode">State</label>
+                                    <select id="state" class="input-medium bfh-states form-control" data-country="US" data-state="CA"></select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="zipcode">Zip</label>
+                                    <input type="number" class="form-control" id="zipcode" placeholder="xxxxx-xx" ng-model="user.zipcode">
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="url">URL</label>
+                                <input type="text" class="form-control" id="url" placeholder="www.brandly.com" ng-model="user.url">
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="quantity">Quantity</label>
+                                <select class="form-control" ng-model="card.quantity" required>
+                                    <option selected="" value="50">50 cards ($xx.xx)</option>
+                                    <option selected="" value="100">100 cards ($xx.xx)</option>
+                                    <option selected="" value="200">200 cards ($xx.xx)</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="submit" class="btn btn-danger btn-lg" ng-click="add(card,user)" value="Add to Cart" />
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="submit" class="btn btn-link" ng-click="update(user)" value="Save Template" />
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-12 additional-links">
+                    <a href="#" class="btn btn-large btn-dark pull-right">Live Chat</a>
+                    <a href="#" data-toggle="modal" data-target="#support-modal" class="btn btn-large btn-primary pull-right">Support</a>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
     </div>
     <div class="clearfix"></div>
     <footer class="footer">
@@ -75,10 +233,44 @@
             </p>
         </div>
     </footer>
+    <div id="support-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <i data-dismiss="modal" class="fa fa-4x fa-times"></i>
+                    <h4>Questions</h4>
+                    <p><strong>Q. How long will it take to get my order delivered?</strong></p>
+                    <p>A. It depends on which method of shipping you select. Larger orders can take up to 6 weeks depending on what state/province you have your order shipped to. This is phony text to see copy filling out the design.</p>
+                    <p><strong>Q. How long will it take to get my order delivered?</strong></p>
+                    <p>A. It depends on which method of shipping you select. Larger orders can take up to 6 weeks depending on what state/province you have your order shipped to. This is phony text to see copy filling out the design.</p>
+                    <br />
+                    <p><strong>Have Specific questions?</strong></p>
+                    <p>Give us a call 1-877-PRINT-NOW. <em>Phone hours 9-5pm M-F</em></p>
+                    <p><a href="#">Email Us</a></p>
+                    <p><a href="#">Browse Our FAQ</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="paper-modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <i data-dismiss="modal" class="fa fa-4x fa-times"></i>
+                    <h4>Example</h4>
+                    <img src="assets/img/paper.png" class="img-responsive" />
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- javascript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-formhelpers.min.js"></script>
+    <script src="assets/js/zoom.js"></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/itemCtrl.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>

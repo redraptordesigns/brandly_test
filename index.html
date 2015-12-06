@@ -15,7 +15,7 @@
     <!-- Custom styles -->
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="assets/js/ie-emulation-modes-warning.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -118,7 +118,7 @@
                         $("#loading").show().delay(4000).fadeOut('slow', function () {
                             $(".dropzone .dz-preview").show();
                             // redirect
-                            
+                            window.location = "item-detail.html";
                         });
                         //animate
                         if (this.files[1] != null) {
