@@ -23,7 +23,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="cart-detail">
+<body class="cart-detail ng-cloak" ng-app="cartApp" ng-controller="cartCtrl">
     <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
@@ -52,12 +52,12 @@
                             <li><a href="#" class="btn btn-primary">Sign In</a></li>
                         </ul>
                     <li><a href="#">Support</a></li>
-                    <li><a href="#"><i class="fa fa-shopping-cart"></i>&nbsp;Cart&nbsp;<span class="badge badge-danger">0</span></a></li>
+                    <li><a href="#"><i class="fa fa-shopping-cart"></i>&nbsp;Cart&nbsp;<span class="badge badge-danger">{{ cards.length }}</span></a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div class="container content">
+    <div class="container content ng-cloak">
         <div class="alert alert-warning text-center" role="alert">
             <i class="fa fa-truck"></i>&nbsp;Shipping is Free for order's $50 or more
         </div>
@@ -67,61 +67,74 @@
             </div>
         </div>
         <div class="row">
-            <div id="cart-row" class="col-sm-7">
-                <div class="well">
+            <div id="cart-row" class="col-sm-7 ng-cloak">
+                <div class="well" ng-repeat="card in cards track by $index">
                     <div class="row title-row">
                         <div class="col-sm-6">
                             <h4>Business Cards</h4>
                         </div>
                         <div class="col-sm-6">
-                            <i data-toggle="tooltip" data-placement="top" title="Remove this card" class="fa fa-trash"></i><i data-toggle="tooltip" data-placement="top" title="Edit this card" class="fa fa-pencil fa-fw"></i><i data-toggle="tooltip" data-placement="top" title="Duplicate this card to start new" class="fa fa-plus-circle"></i>
+                            <i data-toggle="tooltip" data-placement="top" title="Remove this card" ng-click="remove($index)" class="fa fa-trash"></i><i ng-click="edit($index)" data-toggle="tooltip" data-placement="top" title="Edit this card" class="fa fa-pencil fa-fw"></i><i data-toggle="tooltip" data-placement="top" ng-click="dupecard()" title="Duplicate this card to start new" class="fa fa-plus-circle"></i>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                     <hr />
                     <div class="row">
                         <div class="col-sm-4">
-                            <img class="center-block img-responsive" src="http://placehold.it/200x150">
+                            <img class="center-block img-responsive" ng-src="{{ card.img }}">
                         </div>
-                        <div class="small-spacer visible-block-xs"></div>
+                        <div class="small-spacer visible-xs-block"></div>
                         <div class="col-sm-4 col-xs-6">
                             <ul class="list-unstyled">
-                                <li>Business Card - <span>Name</span></li>
-                                <li>Paper Type</li>
-                                <li>Print Style</li>
+                                <li>{{ card.type }} - <span>{{ card.name }}</span></li>
+                                <li>{{ card.paperType }}</li>
+                                <li>{{ card.printStyle }}</li>
                             </ul>
                         </div>
                         <div class="col-sm-4 col-xs-6">
-                            
+                            <div class="form-group">
+                                <select class="form-control" ng-model="cardlist"
+                                        ng-selected="{{ card | selectQuantity:$index:quantities }}"
+                                        ng-change="showQuantity(card, cardlist, $index)">
+                                    <option ng-selected="selected" ng-repeat="option in quantities" value="{{option.value}}">{{option.text}}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="col-sm-5">
+            <div id="order-row" class="col-sm-5 ng-cloak">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">Your Order</h3>
                     </div>
                     <div class="panel-footer">
                         <ul class="list-unstyled" ng-repeat="card in cards">
-                            <li class="">Business Card - Name&nbsp;Quantity<span class="pull-right">$0</span></li>
+                            <li class="ng-cloak">{{ card.type }} - {{ card.name }}&nbsp;({{ card.quantity }})<span class="pull-right">${{ card.cost }}</span></li>
                         </ul>
                     </div>
                     <div class="panel-footer">
-                        <h4 class="">SUBTOTAL <span class="pull-right">$ 0</span></h4>
+                        <h4 class="ng-cloak">SUBTOTAL <span class="pull-right">$ {{ getSubtotal() }}</span></h4>
                     </div>
                     <div class="panel-footer">
-                        <h4 class="">Shipping & Handling:<span class="pull-right">0</span><br/><small class="text-muted">Free (for orders $50 or more)</small></h4>
+                        <h4 class="ng-cloak">Shipping & Handling:<span class="pull-right">{{ getSubtotal() | freeShip }}</span><br /><small class="text-muted">Free (for orders $50 or more)</small></h4>
                     </div>
                     <div class="panel-footer">
-                        
+                        <form class="col-sm-6 pull-right">
+                            <div class="form-group">
+                                <select class="form-control"
+                                        ng-model="taxeslist"
+                                        ng-change="showSelectValue(taxeslist)"
+                                        ng-options="taxes.label as taxes.label for taxes in taxes"></select>
+                            </div>
+                        </form>
                         <h4>Sales Tax</h4>
                         <div class="clearfix"></div>
-                        <p class="text-muted">Based on selected shipping state<span class="col-sm-6 text-align-right pull-right">$ 0</span></p>
+                        <p class="text-muted">Based on selected shipping state<span class="col-sm-6 text-align-right pull-right">$ {{ (currentTax * getSubtotal()) | number:2 }}</span></p>
                     </div>
                     <div class="panel-footer">
-                        <h3 class="">YOUR TOTAL <span class="pull-right">$ 0</span></h3>
+                        <h3 class="ng-cloak">YOUR TOTAL <span class="pull-right">$ {{ ((getSubtotal()*currentTax) + getSubtotal()) | number:2 }}</span></h3>
                     </div>
                 </div>
             </div>
@@ -138,7 +151,7 @@
     </footer>
     <!-- javascript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="dist/js/bootstrap.min.js"></script>
     <script src="assets/js/dropzone.js"></script>
     <script src="assets/js/angular.min.js"></script>
