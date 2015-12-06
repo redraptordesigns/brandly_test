@@ -72,6 +72,16 @@
             </div>
         </div>
         <div class="col-sm-12">
+            <form id="dropzone" action="/" class="dropzone">
+                <div id="loading" class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+                <div class="fallback">
+                    <input name="file" type="file" multiple />
+                </div>
+            </form>
+            <p class="text-center text-muted">Or, click the box to use the Classic Uploader</p>
         </div>
     </div>
     <footer class="footer">
@@ -83,9 +93,41 @@
 
     <!-- javascript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
     <script src="dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/dropzone.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script>
+        $(document).ready(function () {
+            Dropzone.autoDiscover = false;
+            $("#dropzone").dropzone({
+                dictDefaultMessage: "<i class='fa fa-4x fa-cloud-upload'></i><br />Drag & drop your design file here",
+                accept: function (file, done) {
+                    console.log("file: " + file);
+                    console.log("file name: " + file.name);
+                    console.log("file id: " + file.src );
+                    if (file.name == "business_card.pdf") {
+
+                    }
+                },
+                init: function () {
+                    this.on("addedfile", function () {
+                        console.log("File Added");
+                        $(".dropzone .dz-preview").hide();
+                        $("#loading").show().delay(4000).fadeOut('slow', function () {
+                            $(".dropzone .dz-preview").show();
+                            // redirect
+                            
+                        });
+                        //animate
+                        if (this.files[1] != null) {
+                            this.removeFile(this.files[0]);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
